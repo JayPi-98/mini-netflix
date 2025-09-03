@@ -1,5 +1,13 @@
 {
   "expo": {
+
+    "extra":{
+      "eas": {
+        "projectId": "b1c6f0a3-2f4e-4d3b-8f7e-5f3c9e6d9a1b"
+      },
+      "supabaseUrl": "https://iqnzoqjqjfpkkhfkridg.supabase.co",
+      "supabaseAnonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxbnpvcWpxamZwa2toZmtyaWRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY3Nzg4MjgsImV4cCI6MjA3MjM1NDgyOH0.VtGTFzWSrAwS4___r2RaN1jzd1vNi_G-k1TRA37rogs"
+    },
     "name": "mini-netflix",
     "slug": "mini-netflix",
     "version": "1.0.0",
