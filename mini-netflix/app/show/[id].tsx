@@ -1,15 +1,74 @@
-import { Image } from 'expo-image';
+import { useLocalSearchParams } from 'expo-router';
 import { ScrollView, StyleSheet } from 'react-native';
-import { Stack, useLocalSearchParams } from 'expo-router';
 
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { findShowById } from '@/data/catalog';
+import { supabase } from '@/supabase/supabase';
+import { useEffect, useState } from 'react';
+
+interface Show {
+  id: number | string;
+  title: string;
+  synopsis: string;
+  episodes: Episode[];
+}
+interface Episode {
+  id: number | string;
+  number: number;
+  title: string;
+}
 
 export default function ShowDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const show = findShowById(Array.isArray(id) ? id[0] : id);
-
+  const [show, setShow] = useState<Show | null>(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    async function load() {
+      if (!id) {
+        setShow(null)
+        setLoading(false)
+        return
+      }
+      try {
+        const idAsNumber = Number(id)
+        const filterValue: any = Number.isFinite(idAsNumber) ? idAsNumber : id
+        const { data, error } = await supabase
+          .from('shows')
+          .select(
+            `id, title, synopsis,
+             episodes:episodes(id, number, title)`
+          )
+          .eq('id', filterValue)
+          .order('number', { foreignTable: 'episodes', ascending: true })
+          .single()
+        if (error) {
+          console.error('[Supabase] show detail query failed:', error)
+          setShow(null)
+        } else if (data) {
+          setShow({
+            id: data.id,
+            title: data.title,
+            synopsis: data.synopsis,
+            episodes: (data.episodes ?? []).sort(
+              (a: any, b: any) => (a.number ?? 0) - (b.number ?? 0)
+            ),
+          })
+        } else {
+          setShow(null)
+        }
+      } finally {
+        setLoading(false)
+      }
+    }
+    load()
+  }, [id])
+  if (loading) {
+    return (
+      <ThemedView style={styles.center}>
+        <ThemedText>Loading…</ThemedText>
+      </ThemedView>
+    )
+  }
   if (!show) {
     return (
       <ThemedView style={styles.center}>
@@ -20,17 +79,15 @@ export default function ShowDetailScreen() {
 
   return (
     <ScrollView>
-      <Stack.Screen options={{ title: show.title }} />
-      <Image source={{ uri: show.poster }} style={styles.poster} />
       <ThemedView style={styles.content}>
         <ThemedText type="title">{show.title}</ThemedText>
         <ThemedText style={styles.synopsis}>{show.synopsis}</ThemedText>
         <ThemedText type="subtitle" style={styles.episodesHeader}>
-          Episodios
+          Episode
         </ThemedText>
-        {show.episodes.map((ep, index) => (
-          <ThemedText key={ep.id}>
-            {index + 1}. {ep.title}
+        {show.episodes.map((ep) => (
+          <ThemedText key={String(ep.id)}>
+            {ep.number}. {ep.title}
           </ThemedText>
         ))}
       </ThemedView>
