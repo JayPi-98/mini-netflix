@@ -1,15 +1,11 @@
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+// Home screen renders rows via CarouselRow
 import { Category } from '@/data/catalog';
 import { supabase } from '@/supabase/supabase';
-import { Image } from 'expo-image';
-import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { FlatList, Pressable, StyleSheet } from 'react-native';
+import { FlatList } from 'react-native';
+import CarouselRow from '@/components/CarouselRow';
 
 export default function HomeScreen() {
-  const router = useRouter();
-
   const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
@@ -48,55 +44,7 @@ export default function HomeScreen() {
     <FlatList
       data={categories}
       keyExtractor={(item) => String(item.id)}
-      renderItem={({ item }) => (
-        <ThemedView style={styles.category}>
-          <ThemedText type="subtitle" style={styles.categoryTitle}>
-            {item.title}
-          </ThemedText>
-          <FlatList
-            data={item.shows}
-            keyExtractor={(show) => String(show.id)}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            renderItem={({ item: show }) => (
-              <Pressable
-                onPress={() =>
-                  router.push({ pathname: '/show/[id]', params: { id: show.id } })
-                }
-                style={styles.posterContainer}
-              >
-                <Image source={{ uri: show.poster }} style={styles.poster} />
-                <ThemedText numberOfLines={1} style={styles.posterTitle}>
-                  {show.title}
-                </ThemedText>
-              </Pressable>
-            )}
-          />
-        </ThemedView>
-      )}
+      renderItem={({ item }) => <CarouselRow category={item} />}
     />
   );
 }
-
-const styles = StyleSheet.create({
-  category: {
-    marginBottom: 24,
-  },
-  categoryTitle: {
-    marginHorizontal: 8,
-    marginBottom: 8,
-  },
-  posterContainer: {
-    marginHorizontal: 8,
-    width: 120,
-  },
-  poster: {
-    width: 120,
-    height: 180,
-    borderRadius: 8,
-    marginBottom: 4,
-  },
-  posterTitle: {
-    textAlign: 'center',
-  },
-});

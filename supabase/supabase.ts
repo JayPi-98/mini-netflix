@@ -1,9 +1,7 @@
-// supabase.ts
 import { createClient } from '@supabase/supabase-js'
 import { Platform } from 'react-native'
 import 'react-native-url-polyfill/auto'
 
-// Read from `.env` via Expo's EXPO_PUBLIC_* injection
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL
 const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY
 
