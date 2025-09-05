@@ -1,22 +1,10 @@
-import { useLocalSearchParams } from 'expo-router';
-import { ScrollView, StyleSheet } from 'react-native';
-
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { Show } from '@/data/catalog';
 import { supabase } from '@/supabase/supabase';
+import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
-
-interface Show {
-  id: number | string;
-  title: string;
-  synopsis: string;
-  episodes: Episode[];
-}
-interface Episode {
-  id: number | string;
-  number: number;
-  title: string;
-}
+import { ScrollView, StyleSheet } from 'react-native';
 
 export default function ShowDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();

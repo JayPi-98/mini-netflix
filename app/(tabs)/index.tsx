@@ -1,5 +1,6 @@
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { Category } from '@/data/catalog';
 import { supabase } from '@/supabase/supabase';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
@@ -9,7 +10,7 @@ import { FlatList, Pressable, StyleSheet } from 'react-native';
 export default function HomeScreen() {
   const router = useRouter();
 
-  const [categories, setCategories] = useState<any[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
     async function load() {
