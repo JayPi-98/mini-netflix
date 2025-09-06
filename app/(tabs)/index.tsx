@@ -2,8 +2,10 @@
 import { Category } from '@/data/catalog';
 import { supabase } from '@/supabase/supabase';
 import { useEffect, useState } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, StyleSheet, Platform } from 'react-native';
 import CarouselRow from '@/components/CarouselRow';
+import { ThemedView } from '@/components/ThemedView';
+import { ThemedText } from '@/components/ThemedText';
 
 export default function HomeScreen() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -45,6 +47,42 @@ export default function HomeScreen() {
       data={categories}
       keyExtractor={(item) => String(item.id)}
       renderItem={({ item }) => <CarouselRow category={item} />}
+      ListHeaderComponent={
+        <ThemedView style={styles.topBar}>
+          <ThemedText type="title" style={styles.appTitle}>
+            Mini-Netflix
+          </ThemedText>
+        </ThemedView>
+      }
+      contentContainerStyle={styles.listContent}
+      stickyHeaderIndices={[0]}
     />
   );
 }
+
+const styles = StyleSheet.create({
+  topBar: {
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 10,
+    alignItems: 'center',
+    // subtle dividing line + shadow at bottom
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: 'rgba(127,127,127,0.25)',
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 6,
+    zIndex: 2,
+  },
+  appTitle: {
+    // Centered and using the Google font when available
+    letterSpacing: 0.3,
+    textAlign: 'center',
+    fontFamily: Platform.select({ web: 'Pacifico', default: undefined as any }),
+  },
+  listContent: {
+    paddingBottom: 16,
+  },
+});

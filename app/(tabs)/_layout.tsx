@@ -18,6 +18,8 @@ export default function TabLayout() {
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
+        tabBarItemStyle: { flex: 1 },
+        tabBarLabelStyle: { textAlign: 'center' },
         tabBarStyle: Platform.select({
           ios: {
             // Use a transparent background on iOS to show the blur effect
@@ -33,13 +35,8 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
         }}
       />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
+      {/* Hide Explore route from tab bar while keeping the file */}
+      <Tabs.Screen name="explore" options={{ href: null }} />
     </Tabs>
   );
 }
