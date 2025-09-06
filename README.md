@@ -1,50 +1,73 @@
-# Welcome to your Expo app 👋
+# Mini‑Netflix
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Construí una app con Expo Router para explorar series por categoría con un carrusel horizontal y una pantalla de detalle sencilla, usando Supabase como backend.
 
-## Get started
+---
 
-1. Install dependencies
+## Cómo ejecutar
 
-   ```bash
-   npm install
-   ```
+Requisitos
 
-2. Start the app
+- Node 18+ y npm 10+
 
-   ```bash
-   npx expo start
-   ```
+Entorno
 
-In the output, you'll find options to open the app in a
+- Crea un archivo `.env` en la raíz del proyecto con tus credenciales de Supabase:
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+  ```bash
+  EXPO_PUBLIC_SUPABASE_URL="<tu-supabase-url>"
+  EXPO_PUBLIC_SUPABASE_ANON_KEY="<tu-anon-key>"
+  ```
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+Instalar dependencias
 
 ```bash
-npm run reset-project
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Iniciar el servidor
 
-## Learn more
+```bash
+npx expo start
+```
+Y el elegir la opcion de:
+```bash
+Press w | open web
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+Notas
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- Las claves de Supabase se leen desde variables de entorno (`EXPO_PUBLIC_*`). Reinicia el servidor tras editar `.env`.
+- La app usa Expo Router con rutas basadas en archivos dentro de `app/`.
 
-## Join the community
+---
 
-Join our community of developers creating universal apps.
+## Decisiones técnicas
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- Elegí Expo Router para mantener rutas declarativas y portables entre nativo y web. Use un Stack para detalles y una barra de pestañas con una sola pestaña (Home) ya que solamente para esta prueba se necesitaba una vista inicial como esta.
+- En la pantalla de inicio use `react-native-reanimated-carousel` para un carrusel horizontal suave. Ajusté el ancho del viewport para mostrar un “peek” sutil de los pósters adyacentes.
+- Obtengo los datos desde Supabase con `@supabase/supabase-js`. En web evito AsyncStorage para mantener el bundle ligero. La URL y la anon key las leo de `.env` con el prefijo `EXPO_PUBLIC_` para que estén disponibles en tiempo de ejecución de Expo.
+- Implementé una pequeña capa de temas (`ThemedView` / `ThemedText`) que usa el esquema de color actual. En la pantalla de detalle se tiene un póster 2:3 compacto entre el título y la sinopsis.
+- Para las interfaces y las constantes de datos cree carpetas aparte donde exporto estas a los componentes donde se utilizan para que el código no este tan apretado y sea facil de leer.
+
+---
+
+## Prompts usados con IA
+
+Estos son los prompts que utilicé con la IA (resumidos):
+
+- “Haz que el carrusel muestre pósters asomándose a ambos lados sin cambiar tamaño ni colores.”
+- “Añade el póster a la página de detalle entre el título y la sinopsis”
+- “Alinea el póster a la izquierda y limita la sinopsis a ~25% del ancho.”
+- “Añade un botón de volver en la página de detalle para regresar a Home.”
+- “Añade una barra superior en Home con ‘Mini‑Netflix’; céntrala, que sea sticky y con sombra.”
+- “Configura el favicon web con el logo del folder imgs.”
+
+---
+
+## Qué haría después
+
+- Accesibilidad: aumentaría las áreas táctiles, haría el focus visible en web, añadiría descripciones de imágenes y verificaría el contraste de color.
+- Responsividad: prepararía un layout en dos columnas (póster izquierda, texto derecha) en tablet/desktop, manteniendo layout apilado en móviles.
+- Offline e imágenes: cachearía pósters, incorporaría reintentos y retrocesos cuando no haya red.
+- Autenticaciones y perfiles: implementaría el inicio de sesión y crearía perfiles para tener favoritos o recomendaciones basadas en gustos.
