@@ -4,7 +4,6 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 /**
  * Layout:
- * - Viewport (ventana visible) a ancho de pantalla.
  * - Cada slide (CARD_WIDTH) es más angosto que la ventana para que “asomen” los vecinos.
  * - Parallax con escala suave y offset alineado al espacio lateral real.
  */

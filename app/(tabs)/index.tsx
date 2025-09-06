@@ -1,11 +1,11 @@
 // Home screen renders rows via CarouselRow
+import CarouselRow from '@/components/CarouselRow';
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
 import { Category } from '@/data/catalog';
 import { supabase } from '@/supabase/supabase';
 import { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Platform } from 'react-native';
-import CarouselRow from '@/components/CarouselRow';
-import { ThemedView } from '@/components/ThemedView';
-import { ThemedText } from '@/components/ThemedText';
+import { FlatList, Platform, StyleSheet } from 'react-native';
 
 export default function HomeScreen() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -14,7 +14,6 @@ export default function HomeScreen() {
     async function load() {
       const { data, error } = await supabase
         .from('genres')
-        // Expect a FK: shows.genre_id -> genres.id
         .select('id, name, shows ( id, title, poster_path )')
         .order('name', { ascending: true })
         .order('title', { foreignTable: 'shows', ascending: true })

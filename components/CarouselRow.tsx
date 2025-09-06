@@ -44,8 +44,8 @@ export function CarouselRow({ category }: Props) {
         <View style={{ width: SCREEN_WIDTH, overflow: 'visible' }}>
           <Carousel
             ref={ref as any}
-            width={CARD_WIDTH}                         // cada página más angosta que el viewport
-            height={POSTER_HEIGHT + 56}               // póster + título
+            width={CARD_WIDTH} // cada página más angosta que el viewport
+            height={POSTER_HEIGHT + 56} 
             loop
             pagingEnabled
             data={shows}
@@ -54,14 +54,14 @@ export function CarouselRow({ category }: Props) {
             containerStyle={{ overflow: 'visible' }}
             mode="parallax"
             modeConfig={{
-              parallaxScrollingScale: 0.98,           // central ligeramente más grande
-              parallaxAdjacentItemScale: 0.9,         // vecinos más pequeños
+              parallaxScrollingScale: 0.98, // central ligeramente más grande
+              parallaxAdjacentItemScale: 0.9, // vecinos más pequeños
               parallaxScrollingOffset: SIDE_PREVIEW - GUTTER, // cuánto “asoman”
             }}
             renderItem={({ item }) => (
-              <Pressable
+              <Pressable  
                 key={String(item.id)}
-                onPress={() =>
+                onPress={() =>  
                   router.push({ pathname: '/show/[id]', params: { id: item.id } })
                 }
                 style={styles.posterContainer}

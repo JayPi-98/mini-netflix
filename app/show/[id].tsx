@@ -1,7 +1,6 @@
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Show } from '@/data/catalog';
-import { useThemeColor } from '@/hooks/useThemeColor';
 import { supabase } from '@/supabase/supabase';
 import { Image } from 'expo-image';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -19,7 +18,6 @@ const SYNOPSIS_WIDTH = Math.max(150, Math.round(SCREEN_WIDTH * 0.45));
 export default function ShowDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
-  const textColor = useThemeColor({}, 'text');
   const [show, setShow] = useState<Show | null>(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
